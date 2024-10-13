@@ -934,7 +934,7 @@
         }
         
 
-        function updateTradingSignals(sma, ema, rsi) {
+function updateTradingSignals(sma, ema, rsi) {
             const signals = {
                 "1m": 'Neutral',
                 "5m": 'Neutral',
@@ -947,14 +947,20 @@
             // Condiciones para actualizar las señales
             if (rsi < 30 && ema > sma) {
                 signals["1m"] = 'Strong Buy';
-            } else if (rsi < 40 && ema > sma) {
+            }
+            if (rsi < 40 && ema > sma) {
                 signals["5m"] = 'Buy';
-            } else if (rsi > 60 && ema < sma) {
+            }
+            if (rsi > 60 && ema < sma) {
                 signals["15m"] = 'Sell';
-            } else if (rsi > 80 && ema < sma) {
+            }
+            if (rsi > 80 && ema < sma) {
                 signals["1h"] = 'Strong Sell';
+            }
+            if (rsi > 90 && ema < sma) {
                 signals["4h"] = 'Strong Sell';
-            } else if (rsi > 90 && ema < sma) {
+            }
+            if (rsi > 90 && ema < sma) {
                 signals["1d"] = 'Strong Sell';
             }
         
@@ -964,6 +970,7 @@
                 return `<div class="signal ${signalClass}">${key}: ${signals[key]}</div>`;
             }).join('');
         }
+ 
         
         
 

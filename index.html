@@ -471,7 +471,7 @@
     
 
             <div id="prediction">Predicción: Cargando...</div>
-            <div id="choch">CHoCH: ---</div>
+            
 
             <div class="signals" id="signals">Señales: Cargando...</div>
 
@@ -644,7 +644,7 @@
             fetchMarketData();
             startRealTimeUpdates();
             startCountdown();
-            checkCHoCH();
+            
             
         }
 
@@ -654,7 +654,7 @@
             await fetchOrderBook(coin);
             await updateIndicators();
             await fetchNews(); // Cargar noticias
-            await checkCHoCH();
+            
         }
 
         async function fetchCurrentPrice(coin) {
@@ -869,70 +869,6 @@
                 low
             ];
         }
-
-        // Función para calcular el RSI
-function calculateRSI(prices, period = 14) {
-    let gains = 0;
-    let losses = 0;
-    let avgGain, avgLoss;
-
-    // Calcular cambios de precios
-    for (let i = 1; i < prices.length; i++) {
-        const change = prices[i] - prices[i - 1];
-        if (change > 0) {
-            gains += change;
-        } else {
-            losses -= change; // Convertir pérdidas a valores positivos
-        }
-    }
-
-    // Promedios
-    avgGain = gains / period;
-    avgLoss = losses / period;
-
-    // Calcular el RS
-    const rs = avgGain / avgLoss;
-    
-    // Calcular el RSI
-    return 100 - (100 / (1 + rs));
-}
-
-// Función principal para comprobar CHoCH
-function checkCHoCH(historicalPrices, currentPrice) {
-    if (historicalPrices.length < 14) return; // Asegurar que haya suficientes datos para el RSI
-
-    const prevPrice = historicalPrices[historicalPrices.length - 2];
-    const prevLow = Math.min(...historicalPrices.slice(-3));
-    const prevHigh = Math.max(...historicalPrices.slice(-3));
-
-    // Calcular RSI
-    const rsi = calculateRSI(historicalPrices.slice(-14)); // Usamos los últimos 14 precios para el RSI
-
-    let chochSignal = "Neutro";
-
-    // Condición CHoCH para cambio de alcista a bajista
-    if (prevPrice > prevHigh && currentPrice < prevLow) {
-        chochSignal = "CHoCH detectado: Cambio a tendencia bajista.";
-        
-        // Añadir condición de sobrecompra
-        if (rsi > 70) {
-            chochSignal += " (RSI indica sobrecompra)";
-        }
-    }
-    // Condición CHoCH para cambio de bajista a alcista
-    else if (prevPrice < prevLow && currentPrice > prevHigh) {
-        chochSignal = "CHoCH detectado: Cambio a tendencia alcista.";
-        
-        // Añadir condición de sobreventa
-        if (rsi < 30) {
-            chochSignal += " (RSI indica sobreventa)";
-        }
-    }
-
-    if (chochSignal) {
-        document.getElementById("choch").innerText = chochSignal;
-    }
-}
 
 
 
